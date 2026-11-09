@@ -1,0 +1,7 @@
+# Documentos originales: no hacen falta para publicar el sitio
+*.pdf
+hola.jpeg
+
+.claude/
+.DS_Store
+.vercel/

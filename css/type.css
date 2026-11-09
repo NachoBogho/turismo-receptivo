@@ -1,0 +1,59 @@
+/* ==========================================================================
+   Tipografía dentro del mundo. Tamaños en px locales (cuadro de 1920×1080).
+   ========================================================================== */
+.say { position: absolute; color: var(--ink); will-change: transform, opacity; }
+.say > * { margin: 0; }
+.say.light { color: #fff8e8; }
+.say.center { text-align: center; }
+
+.k { font: 700 calc(30px * var(--z, 1))/1.1 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: var(--earth); }
+.light .k { color: var(--sun); }
+.h0 { font: 500 calc(150px * var(--z, 1))/.94 var(--serif); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; letter-spacing: -.02em; }
+.h1 { font: 500 calc(104px * var(--z, 1))/.98 var(--serif); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; letter-spacing: -.015em; margin-top: 14px !important; }
+.h2 { font: 500 calc(70px * var(--z, 1))/1.04 var(--serif); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; letter-spacing: -.01em; margin-top: 12px !important; }
+.h3 { font: 600 calc(46px * var(--z, 1))/1.1 var(--serif); font-variation-settings: "SOFT" 100, "opsz" 72; }
+.p { font: 450 calc(34px * var(--z, 1))/1.34 var(--sans); margin-top: 18px !important; max-width: 34em; }
+.p.sm { font-size: calc(27px * var(--z, 1)); line-height: 1.36; }
+.hand { font: 700 calc(50px * var(--z, 1))/1.05 var(--hand); }
+.num { font: 600 calc(158px * var(--z, 1))/.95 var(--serif); font-variation-settings: "SOFT" 100, "opsz" 144; font-feature-settings: "tnum" 1, "lnum" 1; letter-spacing: -.02em; }
+.num.md { font-size: calc(104px * var(--z, 1)); }
+.num + .p { margin-top: 6px !important; }
+em.mark { font-style: normal; background: linear-gradient(transparent 62%, rgba(242,181,68,.6) 62%); }
+.light em.mark { background: linear-gradient(transparent 66%, rgba(242,181,68,.45) 66%); }
+.term { border-bottom: 3px dotted currentColor; cursor: help; pointer-events: auto; }
+
+/* Globo de pensamiento de Valeria */
+.bub p { margin: 0; background: #fffdf6; padding: 20px 26px 22px; border-radius: 30px; font: 700 calc(40px * var(--z, 1))/1.06 var(--hand); color: var(--ink); box-shadow: 0 8px 0 rgba(13,27,42,.13); position: relative; }
+.bub p::after { content: ""; position: absolute; bottom: -24px; width: 34px; height: 34px; background: #fffdf6; border-radius: 0 0 28px 0; transform: skewX(24deg); }
+.bub-l p::after { left: 44px; }
+.bub-r p::after { right: 44px; transform: skewX(-24deg) scaleX(-1); }
+
+/* Exclamación de historieta: sale de la boca de Valeria */
+.region-text .bub-burst::before, .region-text .bub-burst::after { content: ""; position: absolute; left: -9%; right: -9%; top: -20%; bottom: -46%; clip-path: polygon(50% 0, 57% 11%, 71% 2%, 73% 15%, 90% 9%, 85% 25%, 100% 31%, 89% 42%, 99% 54%, 86% 57%, 100% 100%, 73% 67%, 62% 80%, 53% 68%, 39% 82%, 33% 68%, 15% 77%, 18% 61%, 0 57%, 11% 46%, 0 33%, 12% 27%, 6% 11%, 24% 16%, 30% 3%, 42% 13%); }
+.region-text .bub-burst::before { background: var(--earth); }
+.region-text .bub-burst::after { background: var(--sun); left: -6.5%; right: -6.5%; top: -15%; bottom: -41%; }
+.bub-burst p { position: relative; z-index: 1; background: none; box-shadow: none; padding: 0 calc(20px * var(--z, 1)); text-align: center; font-size: calc(68px * var(--z, 1)); line-height: .98; transform: rotate(-4deg); }
+.bub-burst p::after { display: none; }
+
+/* Fondo de papel para los textos que caen sobre una ilustración cargada */
+.plate { background: #fbf4e3; padding: calc(30px * var(--z, 1)) calc(48px * var(--z, 1)) calc(34px * var(--z, 1)); border-radius: calc(16px * var(--z, 1)); box-shadow: 0 calc(10px * var(--z, 1)) calc(26px * var(--z, 1)) rgba(13,27,42,.28); }
+
+/* Hotspots: punto vivo + etiqueta */
+.hot { position: absolute; display: flex; align-items: center; gap: calc(12px * var(--z, 1)); pointer-events: auto; z-index: 20; will-change: transform, opacity; }
+.hot i { position: relative; display: block; flex: none; width: calc(34px * var(--z, 1)); height: calc(34px * var(--z, 1)); border-radius: 50%; background: var(--sun); border: 4px solid #fffdf6; box-shadow: 0 4px 12px rgba(13,27,42,.35); }
+.hot i::before { content: "+"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 calc(22px * var(--z, 1))/1 var(--sans); color: var(--ink); margin-top: -2px; }
+.hot i::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 3px solid var(--sun); animation: pulse 2.2s ease-out infinite; }
+.hot span { font: 700 calc(27px * var(--z, 1))/1 var(--cond); letter-spacing: .05em; padding: calc(9px * var(--z, 1)) calc(15px * var(--z, 1)); border-radius: 9px; background: rgba(255,253,246,.96); color: var(--ink); white-space: nowrap; box-shadow: 0 4px 12px rgba(13,27,42,.22); transition: transform .2s; }
+.hot:hover span, .hot:focus-visible span { transform: translateX(5px); background: var(--sun); }
+.hot:focus-visible { outline: 3px solid var(--sun); outline-offset: 6px; border-radius: 12px; }
+
+/* Cartel-tipo sobre fondos complejos: un trozo de papel, no una tarjeta */
+.scrap { background: #fbf4e3; padding: 34px 42px 38px; border-radius: 6px 22px 8px 26px; box-shadow: 0 16px 34px rgba(13,27,42,.26); transform: rotate(-.7deg); }
+.scrap.tilt { transform: rotate(1.1deg); }
+
+/* En vertical los textos del mundo pasan al narrador inferior. */
+.is-portrait .say { display: none; }
+.is-portrait .hot { display: none; }
+
+.z40 { --z: .4; } .z50 { --z: .5; } .z60 { --z: .6; } .z75 { --z: .75; } .z90 { --z: .9; }
+.z125 { --z: 1.25; } .z150 { --z: 1.5; } .z200 { --z: 2; }

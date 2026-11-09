@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cuando el viaje cambia de rumbo</title>
+  <meta name="description" content="Turismo receptivo y cambio climático: una presentación interactiva que se recorre con el scroll junto a Valeria.">
+  <meta name="theme-color" content="#123a4a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23c2502f'/%3E%3Cpath d='M9 22l7-14 7 14-7-4z' fill='%23fff8e8'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/type.css">
+  <link rel="stylesheet" href="css/scenes.css">
+  <link rel="stylesheet" href="css/hud.css">
+</head>
+<body>
+  <!-- El escenario queda fijo: el scroll sólo mueve el tiempo de la historia. -->
+  <div id="stage" aria-hidden="false">
+    <div id="world"></div>
+    <canvas id="rain" aria-hidden="true"></canvas>
+    <div id="clouds" aria-hidden="true"></div>
+    <div id="fade" aria-hidden="true"></div>
+    <div id="grain" aria-hidden="true"></div>
+
+    <header id="hud-top">
+      <div id="hud-part"><span id="hud-part-n"></span><strong id="hud-part-t"></strong></div>
+      <nav id="hud-tools" aria-label="Material de consulta">
+        <button data-panel="glosario">Glosario</button>
+        <button data-panel="fuentes">Fuentes</button>
+      </nav>
+    </header>
+
+    <nav id="rail" aria-label="Partes de la presentación"></nav>
+
+    <div id="hint" aria-hidden="true">
+      <span class="hint-mouse"><i></i></span>
+      <span>Hacé scroll para partir</span>
+    </div>
+
+    <aside id="narrator" aria-live="polite"></aside>
+    <div id="tooltip" role="tooltip"></div>
+  </div>
+
+  <div id="loader" role="status">Preparando el viaje…</div>
+
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div id="modal-back" data-close></div>
+    <article id="modal-card">
+      <button id="modal-x" data-close aria-label="Cerrar">×</button>
+      <div id="modal-body"></div>
+    </article>
+  </div>
+
+  <!-- La altura de esta pista es la duración de toda la historia. -->
+  <main id="track"></main>
+  <section id="sr-outline" class="sr-only" aria-label="Contenido de la presentación en texto"></section>
+
+  <noscript><p style="padding:2rem;font:18px sans-serif">Esta presentación necesita JavaScript para mostrar el recorrido animado.</p></noscript>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+
+  <script src="js/art/geodata.js"></script>
+  <script src="js/art/kit.js"></script>
+  <script src="js/art/laminas.js"></script>
+  <script src="js/valeria.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/data/fichas.js"></script>
+
+  <!-- Cada archivo define un tramo del mundo y sus paradas, en orden narrativo. -->
+  <script src="js/regions/00-atlas.js"></script>
+  <script src="js/regions/01-iguazu.js"></script>
+  <script src="js/regions/02-sistema.js"></script>
+  <script src="js/regions/03-entrerios.js"></script>
+  <script src="js/regions/04-chalten.js"></script>
+  <script src="js/regions/05-ushuaia.js"></script>
+  <script src="js/regions/06-futuros.js"></script>
+  <script src="js/regions/07-destino.js"></script>
+
+  <script src="js/interactions.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

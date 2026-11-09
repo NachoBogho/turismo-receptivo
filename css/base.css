@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Base: fuentes, escenario fijo, mundo, regiones y capas
+   ========================================================================== */
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces-latin-full-normal.woff2") format("woff2-variations"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces-latin-full-italic.woff2") format("woff2-variations"); font-weight: 100 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("../assets/fonts/figtree-latin-wght-normal.woff2") format("woff2-variations"); font-weight: 300 900; font-display: swap; }
+@font-face { font-family: "Caveat"; src: url("../assets/fonts/caveat-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Caveat"; src: url("../assets/fonts/caveat-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../assets/fonts/barlow-condensed-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../assets/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+:root {
+  --ink: #16263d;
+  --ink-soft: #3d4c63;
+  --paper: #f6ecd6;
+  --paper-deep: #e9d8b4;
+  --sea: #123a4a;
+  --sea-2: #1a5362;
+  --earth: #c2502f;
+  --jungle: #1f6b4f;
+  --sun: #f2b544;
+  --denim: #5c97d3;
+  --lilac: #a7b4e3;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Figtree", system-ui, sans-serif;
+  --hand: "Caveat", "Segoe Script", cursive;
+  --cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--sea); scrollbar-width: none; -webkit-text-size-adjust: 100%; }
+html::-webkit-scrollbar { display: none; }
+body { margin: 0; color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+html.locked, html.locked body { overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+#track { display: block; width: 1px; }
+
+#stage { position: fixed; inset: 0; overflow: hidden; background: var(--sea); contain: strict; }
+#world {
+  position: absolute; left: 0; top: 0; width: 0; height: 0;
+  transform-origin: 0 0; will-change: transform;
+}
+
+.region, .region-fg, .region-text {
+  position: absolute; left: 0; top: 0; width: 0; height: 0;
+  transform-origin: 0 0; opacity: 0; will-change: opacity;
+}
+.region-bg { position: absolute; pointer-events: none; }
+.layer { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; will-change: transform; }
+
+/* Todo lo que está dentro de una capa se posiciona en coordenadas locales. */
+.layer > svg, .a { position: absolute; overflow: visible; }
+.a > svg { overflow: visible; }
+.a { will-change: transform; }
+svg.static { pointer-events: none; }
+
+#valeria {
+  position: absolute; left: 0; top: 0; width: 520px; height: 1060px;
+  transform-origin: 290px 1030px; will-change: transform, opacity; pointer-events: none;
+}
+#valeria svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+#tint { position: absolute; left: -30000px; top: -30000px; width: 70000px; height: 70000px; background: #0f1b33; opacity: 0; pointer-events: none; will-change: opacity; }
+#rain { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#fade { position: absolute; inset: 0; background: var(--paper); opacity: 0; pointer-events: none; }
+#clouds { position: absolute; inset: 0; pointer-events: none; overflow: hidden; visibility: hidden; }
+#clouds > div { position: absolute; top: -15%; height: 130%; width: 95%; will-change: transform; }
+#clouds > .veil { inset: 0; width: 100%; height: 100%; top: 0; background: #fbf6ea; opacity: 0; will-change: opacity; }
+#clouds svg { width: 100%; height: 100%; display: block; }
+#grain { position: absolute; inset: 0; opacity: .045; pointer-events: none; }
+#loader { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: var(--sea); color: #fff8e8; font: 700 44px/1 var(--hand); transition: opacity .35s; }
+#loader.off { opacity: 0; pointer-events: none; }
+
+/* Animaciones ambientales: no dependen del scroll y se apagan con reduced motion. */
+@keyframes flow { to { transform: translate3d(0, 420px, 0); } }
+@keyframes mist { 0%,100% { transform: translate3d(-24px, 8px, 0) scale(1); opacity: .55; } 50% { transform: translate3d(26px, -18px, 0) scale(1.14); opacity: .9; } }
+@keyframes drift { from { transform: translate3d(-90px, 0, 0); } to { transform: translate3d(90px, 0, 0); } }
+@keyframes pulse { 0% { transform: scale(.7); opacity: .85; } 100% { transform: scale(2.3); opacity: 0; } }
+@keyframes bob { 0%,100% { transform: translate3d(0, -6px, 0); } 50% { transform: translate3d(0, 6px, 0); } }
+@keyframes steam { 0% { transform: translate3d(0, 20px, 0) scale(.7); opacity: 0; } 40% { opacity: .7; } 100% { transform: translate3d(12px, -120px, 0) scale(1.5); opacity: 0; } }
+
+.flow { position: absolute; overflow: hidden; pointer-events: none; }
+.flow i { position: absolute; left: 0; right: 0; top: -420px; bottom: 0; animation: flow 1.5s linear infinite; will-change: transform; background-size: 240px 420px; }
+.mist { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,255,255,0)); animation: mist 7s ease-in-out infinite; pointer-events: none; will-change: transform, opacity; }
+.drifter { animation: drift 26s ease-in-out infinite alternate; }
+.bobber { animation: bob 5s ease-in-out infinite; }
+.steam { position: absolute; width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.8), rgba(255,255,255,0)); animation: steam 4.5s ease-out infinite; pointer-events: none; }
+
+.rm .flow i, .rm .mist, .rm .drifter, .rm .bobber, .rm .steam, .rm .hot i::after, .rm .hint-mouse i, .rm .pin em { animation: none !important; }
