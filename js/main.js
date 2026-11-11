@@ -4,7 +4,6 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     VJ.boot();
     VJ.ui.init();
-    await VJ.warmUp();
     VJ.render(0);
     const loader = document.getElementById('loader');
     loader.classList.add('off');

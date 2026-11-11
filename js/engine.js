@@ -15,13 +15,19 @@ window.VJ = window.VJ || {};
   const regions = (VJ.R = {});
   const regionList = [];
   const UNIT_VH = 72;           // cuánto scroll (vh) dura una unidad de tiempo
-  const ART_Q = 1.35;           // píxeles de ilustración por unidad de región
-  const TEXT_Q = 1.6;           // ídem para los textos
+  /* Presupuesto gráfico: pensado para que una PC común no se quede sin memoria de video.
+     ART_Q son píxeles de ilustración por unidad de región; los planos lejanos van más
+     suaves porque se ven desenfocados detrás del principal. */
+  const ART_Q = +new URLSearchParams(location.search).get('q') || 1.2;
+  const TEXT_Q = 1.5;
+  const LAYER_K = { far: 0.7, mid: 0.85, fg: 0.85 };
+  const BG_K = 8;               // los fondos en degradé se dibujan a 1/8 y se agrandan
 
-  /* Una región fuera de escena sigue pintada: sólo deja de recibir clics y de animarse. */
+  /* Un destino fuera de escena se oculta del todo: así el navegador libera su memoria. */
   function setLive(R, on) {
     R.hits.forEach((n) => { n.style.pointerEvents = on ? '' : 'none'; });
     R.ambient.forEach((n) => { n.style.animationPlayState = on ? 'running' : 'paused'; });
+    [R.el, R.fgEl, R.textEl].forEach((n) => n && (n.style.visibility = on ? 'visible' : 'hidden'));
   }
 
   /* ---------- utilidades ---------- */
@@ -49,20 +55,24 @@ window.VJ = window.VJ || {};
       el.className = 'region'; el.id = 'r-' + R.id;
       el.style.transform = `translate3d(${R.x}px,${R.y}px,0) scale(${R.s})`;
       let html = '';
-      if (R.bg) html += `<div class="region-bg" style="left:${R.bgBox[0]}px;top:${R.bgBox[1]}px;width:${R.bgBox[2]}px;height:${R.bgBox[3]}px;background:${R.bg}"></div>`;
-      (R.layers || []).forEach((L, i) => { if (art[L.name]) html += `<div class="layer" data-k="${L.k}" style="zoom:${Q}">${art[L.name]}</div>`; });
+      if (R.bg) {
+        const bg = R.bg.replace(/(-?\d+(?:\.\d+)?)px/g, (m, n) => +n / BG_K + 'px');
+        html += `<div class="region-bg" style="left:${R.bgBox[0]}px;top:${R.bgBox[1]}px;width:${R.bgBox[2] / BG_K}px;height:${R.bgBox[3] / BG_K}px;transform:scale(${BG_K});background:${bg}"></div>`;
+      }
+      (R.layers || []).forEach((L, i) => { if (art[L.name]) html += `<div class="layer" data-k="${L.k}" data-q="${Q * (LAYER_K[L.name] || 1)}" style="zoom:${Q * (LAYER_K[L.name] || 1)}">${art[L.name]}</div>`; });
       el.innerHTML = html;
       world.appendChild(el);
       R.el = el;
-      R.layersEls = [...el.querySelectorAll('.layer')].map((n) => ({ n, k: +n.dataset.k, tx: 0 }));
+      R.layersEls = [...el.querySelectorAll('.layer')].map((n) => ({ n, k: +n.dataset.k, q: +n.dataset.q, tx: 0 }));
       R.alpha = 0;
       if (art.fg) {
         const fg = document.createElement('section');
         fg.className = 'region-fg';
         fg.style.transform = el.style.transform;
-        fg.innerHTML = `<div class="layer" data-k="${R.fgK || -0.1}" style="zoom:${Q}">${art.fg}</div>`;
+        const fq = Q * (LAYER_K.fg || 1);
+        fg.innerHTML = `<div class="layer" data-k="${R.fgK || -0.1}" style="zoom:${fq}">${art.fg}</div>`;
         R.fgEl = fg;
-        R.fgLayer = { n: fg.firstChild, k: R.fgK || -0.1 };
+        R.fgLayer = { n: fg.firstChild, k: R.fgK || -0.1, q: fq };
       }
       // Los textos y hotspots viven en un plano propio, por encima del tinte de escena.
       const items = [...el.querySelectorAll('.say,.hot')];
@@ -201,6 +211,11 @@ window.VJ = window.VJ || {};
 
     beats.forEach((b) => b.anim && b.anim(tl, b.t1, b.t2, b));
     tl.set({}, {}, VJ.total);
+    // Capa propia sólo para lo que se mueve; lo que apenas aparece o desaparece no la necesita.
+    const MOVE = ['x', 'y', 'rotation', 'scale', 'scaleX', 'scaleY'];
+    tl.getChildren(true, true, false).forEach((tw) => {
+      if (MOVE.some((k) => k in tw.vars)) tw.targets().forEach((n) => n.classList && n.classList.contains('a') && n.classList.add('moves'));
+    });
     tl.eventCallback('onUpdate', () => VJ.render(tl.time()));
     return tl;
   }
@@ -279,14 +294,14 @@ window.VJ = window.VJ || {};
       if (R.alpha <= 0) return;
       const lx = (cam.x - R.x) / R.s, ly = (cam.y - R.y) / R.s;
       const ox = lx - (R.px || 0), oy = ly - (R.py || 0);
-      const Q = R.Q;
+      // Cada capa tiene su propia densidad (q): el desplazamiento se divide por ella.
       R.layersEls.forEach((L) => {
         const tx = RM ? 0 : ox * L.k, ty = RM ? 0 : oy * L.k * 0.6;
-        L.n.style.transform = `translate3d(${tx / Q}px,${ty / Q}px,0) scale(${1 / Q})`;
+        L.n.style.transform = `translate3d(${tx / L.q}px,${ty / L.q}px,0) scale(${1 / L.q})`;
       });
       if (R.fgLayer) {
-        const tx = RM ? 0 : ox * R.fgLayer.k, ty = RM ? 0 : oy * R.fgLayer.k * 0.6;
-        R.fgLayer.n.style.transform = `translate3d(${tx / Q}px,${ty / Q}px,0) scale(${1 / Q})`;
+        const F = R.fgLayer, tx = RM ? 0 : ox * F.k, ty = RM ? 0 : oy * F.k * 0.6;
+        F.n.style.transform = `translate3d(${tx / F.q}px,${ty / F.q}px,0) scale(${1 / F.q})`;
       }
     });
   }
@@ -450,26 +465,6 @@ window.VJ = window.VJ || {};
     })();
   }
 
-  /* Dibuja cada destino una vez, detrás de la pantalla de carga, para que el navegador
-     ya lo tenga listo cuando la cámara llegue. Tope de tiempo: nunca demora el inicio. */
-  VJ.warmUp = async function () {
-    const nextPaint = () => new Promise((res) => {
-      const t = setTimeout(res, 160);
-      requestAnimationFrame(() => requestAnimationFrame(() => { clearTimeout(t); res(); }));
-    });
-    const started = performance.now();
-    for (const R of regionList) {
-      if (R.base) continue;
-      if (performance.now() - started > 2600) break;
-      const b = beats.find((x) => x.r === R.id);
-      regionList.forEach((x) => setAlpha(x, x === R ? 1 : 0));
-      cam.x = b.A.x; cam.y = b.A.y; cam.w = b.A.w; cam.r = b.A.r;
-      applyCamera(null);
-      parallax();
-      await nextPaint();
-    }
-  };
-
   /* ---------- arranque ---------- */
   VJ.boot = function () {
     worldEl = world();
@@ -484,7 +479,7 @@ window.VJ = window.VJ || {};
     const tl = buildTimeline();
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.config({ ignoreMobileResize: true });
-    ScrollTrigger.create({ animation: tl, trigger: track, start: 'top top', end: 'bottom bottom', scrub: RM ? true : 0.75 });
+    ScrollTrigger.create({ animation: tl, trigger: track, start: 'top top', end: 'bottom bottom', scrub: RM ? true : 0.5 });
     addEventListener('resize', VJ.resize);
     VJ.render(0);
     rainLoop();

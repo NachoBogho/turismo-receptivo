@@ -136,6 +136,7 @@
   let navT = null;
   function targetT(b) { return b.t1 + b.hold * 0.42; }
   function go(i) {
+    wheel.stop();
     const beats = VJ.beats;
     i = Math.max(0, Math.min(beats.length - 1, i));
     const y = VJ.scrollFor(i === 0 ? 0 : targetT(beats[i]));
@@ -146,6 +147,34 @@
     current = i;
   }
   ui.go = go;
+
+  /* Rueda del mouse: en una PC avanza a saltos y la animación se corta entre un salto y
+     otro. Acá cada giro se convierte en un deslizamiento continuo, como en un trackpad. */
+  const wheel = (() => {
+    let target = null, cur = 0, raf = 0;
+    const max = () => document.documentElement.scrollHeight - innerHeight;
+    function step() {
+      cur += (target - cur) * 0.16;
+      if (Math.abs(target - cur) < 0.6) cur = target;
+      scrollTo(0, cur);
+      if (cur !== target) raf = requestAnimationFrame(step);
+      else { raf = 0; target = null; }
+    }
+    addEventListener('wheel', (e) => {
+      if (VJ.RM || e.ctrlKey || !modal.hidden) return;
+      if (e.target.closest && e.target.closest('#narrator')) return;
+      e.preventDefault();
+      let d = e.deltaY;
+      if (e.deltaMode === 1) d *= 40; else if (e.deltaMode === 2) d *= innerHeight;
+      // Un "clic" de ruedita (salto grande y redondo) rinde un poco más que en un trackpad.
+      else if (Math.abs(d) >= 100 && Number.isInteger(d) && !e.deltaX) d *= 1.5;
+      if (target === null) target = cur = scrollY;
+      if (navT) navT.kill();
+      target = Math.max(0, Math.min(max(), target + d));
+      if (!raf) raf = requestAnimationFrame(step);
+    }, { passive: false });
+    return { stop() { if (raf) cancelAnimationFrame(raf); raf = 0; target = null; } };
+  })();
   let current = 0;
   addEventListener('keydown', (e) => {
     if (!modal.hidden) { if (e.key === 'Escape') close(); return; }

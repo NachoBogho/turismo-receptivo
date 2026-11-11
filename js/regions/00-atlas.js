@@ -65,7 +65,7 @@
     </button>`;
 
   VJ.region({
-    id: 'atlas', x: 0, y: 0, s: 1, q: 2, base: true,
+    id: 'atlas', x: 0, y: 0, s: 1, q: 1.6, base: true,
     layers: [{ name: 'main', k: 0 }],
     bg: 'radial-gradient(1500px 1200px at 50% 45%, #1b5362 0%, #123a4a 62%, #0d2c3a 100%)', bgBox: [-6000, -5000, 14600, 11600],
     build() {
