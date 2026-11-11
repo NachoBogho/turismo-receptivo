@@ -138,6 +138,6 @@
   VJ.beat({ id: 'c-carga', part: 3, r: 'chalten', cam: [4660, 1240, 2500], travel: 1.2, hold: 1.8, val: { x: 3570, y: footY, ...V, pose: 'point', expr: 'think', look: [0.9, -0.3] } });
   VJ.beat({ id: 'c-cierre', part: 3, r: 'chalten', cam: [3760, 1000, 3600], travel: 0.9, hold: 1.2, val: { x: 3570, y: footY, ...V, pose: 'strap', expr: 'smile', look: [0.4, -0.7] } });
 
-  VJ.beat({ id: 'ruta-usu', part: 3, r: 'atlas', cam: [1180, 1330, 1000], travel: 1.2, hold: 0.8, drift: 0.012, val: { x: PIN.chalten[0] + 4, x2: PIN.ushuaia[0] + 4, y: PIN.chalten[1] + 28, y2: PIN.ushuaia[1] + 28, s: 0.13, pose: 'stand', expr: 'smile', look: [0.5, 0], tele: true },
+  VJ.beat({ id: 'ruta-usu', part: 3, r: 'atlas', cam: [1180, 1330, 1000], travel: 1.2, hold: 1.05, drift: 0.012, val: { x: PIN.chalten[0] + 4, x2: PIN.ushuaia[0] + 4, y: PIN.chalten[1] + 28, y2: PIN.ushuaia[1] + 28, s: 0.13, pose: 'stand', expr: 'smile', look: [0.5, 0], tele: true },
     anim(tl, t) { tl.fromTo('#route-live', { strokeDashoffset: 170 }, { strokeDashoffset: 0, duration: 0.72, immediateRender: false }, t); } });
 })();

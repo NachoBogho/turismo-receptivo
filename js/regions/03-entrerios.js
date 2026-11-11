@@ -109,7 +109,7 @@
       tl.to('#e-flood', { y: -880, duration: 1.3, ease: 'sine.inOut' }, b.t0 + 0.4);
       [0, 1, 2, 3, 4].forEach((i) => { gsap.set(`#umb${i}`, { transformOrigin: `${[500, 860, 1220, 1580, 1940][i]}px ${SAND + 8}px` }); tl.to(`#umb${i}`, { rotation: i % 2 ? 22 : -24, y: -30, duration: 0.5 }, t + 0.1 + i * 0.1); });
     } });
-  VJ.beat({ id: 'e-multi', part: 2, r: 'entre', cam: [4180, 1180, 2600], travel: 1.2, hold: 1.5, val: { x: 3720, y: SAND + 70, ...V, pose: 'point', expr: 'smile', look: [0.9, -0.4] },
+  VJ.beat({ id: 'e-multi', part: 2, r: 'entre', cam: [4180, 1180, 2600], travel: 1.2, hold: 1.8, val: { x: 3720, y: SAND + 70, ...V, pose: 'point', expr: 'smile', look: [0.9, -0.4] },
     anim(tl, t, e, b) {
       tl.to('#e-flood', { y: 0, duration: 0.6 }, b.t0);
       [0, 1, 2, 3, 4].forEach((i) => tl.to(`#umb${i}`, { rotation: 0, y: 0, duration: 0.4 }, b.t0));

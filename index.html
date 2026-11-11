@@ -33,8 +33,14 @@
 
     <div id="hint" aria-hidden="true">
       <span class="hint-mouse"><i></i></span>
-      <span>Hacé scroll para partir</span>
+      <span>Hacé scroll o usá las flechas</span>
     </div>
+
+    <nav id="pager" aria-label="Avanzar por paradas">
+      <button id="pager-prev" data-step="-1" aria-label="Parada anterior (flecha izquierda)">‹</button>
+      <span id="pager-n" aria-live="polite">1 / 1</span>
+      <button id="pager-next" data-step="1" aria-label="Parada siguiente (flecha derecha)">›</button>
+    </nav>
 
     <aside id="narrator" aria-live="polite"></aside>
     <div id="tooltip" role="tooltip"></div>

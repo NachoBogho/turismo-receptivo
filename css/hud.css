@@ -26,6 +26,16 @@
 .hint-mouse i { position: absolute; left: 50%; top: 7px; width: 4px; height: 9px; margin-left: -2px; border-radius: 2px; background: currentColor; animation: wheel 1.6s ease-in-out infinite; }
 @keyframes wheel { 0% { transform: none; opacity: 1; } 70% { transform: translateY(13px); opacity: 0; } 100% { opacity: 0; } }
 
+/* Flechas en pantalla: avanzar parada por parada sin ruedita ni teclado */
+#pager { position: absolute; right: 26px; bottom: 24px; z-index: 40; display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: 99px; background: rgba(14,28,46,.62); color: #fff8e8; }
+#pager button { width: 48px; height: 48px; border-radius: 50%; background: #fffdf6; color: var(--ink); font: 600 34px/1 var(--serif); padding-bottom: 5px; transition: background .2s, transform .15s; }
+#pager button:hover, #pager button:focus-visible { background: var(--sun); outline: none; }
+#pager button:active { transform: scale(.92); }
+#pager button:disabled { opacity: .35; cursor: default; background: #fffdf6; }
+#pager span { min-width: 74px; text-align: center; font: 700 17px/1 var(--cond); letter-spacing: .06em; }
+.is-portrait #pager { top: 62px; bottom: auto; right: 12px; }
+.is-portrait #pager button { width: 40px; height: 40px; font-size: 28px; }
+
 #tooltip { position: absolute; z-index: 60; max-width: 300px; background: var(--ink); color: #fff8e8; padding: 10px 13px; border-radius: 9px; font: 500 15px/1.32 var(--sans); pointer-events: none; opacity: 0; transition: opacity .12s; }
 #tooltip.on { opacity: 1; }
 

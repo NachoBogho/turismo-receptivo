@@ -238,7 +238,7 @@
 
   /* ---------- paradas ---------- */
   const segs = [...Array(N_SEG).keys()];
-  VJ.beat({ id: 'i-llegada', part: 1, r: 'iguazu', cam: [3300, 1430, 2200], travel: 1.5, hold: 1.2, val: { x: 2420, x2: 3280, y: GROUND, s: 0.42, pose: 'stand', expr: 'joy', look: [0.7, -0.2], tele: true },
+  VJ.beat({ id: 'i-llegada', part: 1, r: 'iguazu', cam: [3300, 1430, 2200], travel: 1.5, hold: 1.5, val: { x: 2420, x2: 3280, y: GROUND, s: 0.42, pose: 'stand', expr: 'joy', look: [0.7, -0.2], tele: true },
     anim(tl, t) { gsap.set(['#i-barrier'], { y: -1800 }); gsap.set('#i-rings', { autoAlpha: 0 }); gsap.set('#i-work', { autoAlpha: 0 }); gsap.set(segs.map((i) => `#stack${i}`), { autoAlpha: 0 }); gsap.set('#i-flags', { autoAlpha: 0 }); tl.to('#train', { x: -260, duration: 1.2, ease: 'sine.inOut' }, t); } });
 
   VJ.beat({ id: 'i-cierre', part: 1, r: 'iguazu', cam: [3890, 1490, 1500], travel: 0.9, hold: 1.25, val: { x: 3540, y: GROUND, s: 0.42, pose: 'point', expr: 'oh', look: [0.9, -0.4] },
@@ -246,7 +246,7 @@
 
   VJ.beat({ id: 'i-porque', part: 1, r: 'iguazu', cam: [4700, 1400, 2900], travel: 1, hold: 1, val: { x: 3540, y: GROUND, s: 0.42, pose: 'think', expr: 'think', look: [0.8, -0.7] } });
 
-  VJ.beat({ id: 'i-2023', part: 1, r: 'iguazu', cam: [4560, 1400, 2500], travel: 1, hold: 1.4, tint: 0.55, rain: 0.9, val: false,
+  VJ.beat({ id: 'i-2023', part: 1, r: 'iguazu', cam: [4560, 1400, 2500], travel: 1, hold: 1.7, tint: 0.55, rain: 0.9, val: false,
     anim(tl, t, e, b) {
       tl.to('#i-flood', { y: -1272, duration: 0.8, ease: 'sine.inOut' }, b.t0 + 0.5);
       tl.to('#i-barrier', { autoAlpha: 0, duration: 0.2 }, b.t0 + 0.3);
@@ -254,14 +254,14 @@
       K.count(tl, '#n79', 0, 79, t + 0.1, 0.8);
     } });
 
-  VJ.beat({ id: 'i-2026', part: 1, r: 'iguazu', cam: [3720, 1300, 2500], travel: 1.2, hold: 1.5, val: { x: 2500, y: GROUND, s: 0.42, pose: 'point', expr: 'smile', look: [0.9, -0.5], tele: true },
+  VJ.beat({ id: 'i-2026', part: 1, r: 'iguazu', cam: [3720, 1300, 2500], travel: 1.2, hold: 1.8, val: { x: 2500, y: GROUND, s: 0.42, pose: 'point', expr: 'smile', look: [0.9, -0.5], tele: true },
     anim(tl, t, e, b) {
       tl.to('#i-flood', { y: 0, duration: 0.6, ease: 'sine.inOut' }, b.t0);
       segs.forEach((i) => tl.to(`#seg${i}`, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.3 }, b.t0 + 0.4));
       tl.to('#i-work', { autoAlpha: 1, duration: 0.2 }, t);
       tl.set('.cables', { opacity: 1 }, t + 0.1);
       [...segs].reverse().forEach((i, k) => {
-        const at = t + 0.22 + k * 0.095;
+        const at = t + 0.22 + k * 0.08;
         tl.to(`#seg${i}`, { y: -2600, duration: 0.3, ease: 'power1.in' }, at);
         tl.set(`#seg${i}`, { autoAlpha: 0 }, at + 0.31);
         tl.to(`#stack${i}`, { autoAlpha: 1, duration: 0.05 }, at + 0.22);

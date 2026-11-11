@@ -134,17 +134,34 @@
 
   /* ---------- navegación por teclado y por paradas ---------- */
   let navT = null;
-  function targetT(b) { return b.t1 + b.hold * 0.42; }
+
+  /* Punto de freno de cada parada: cuando ya terminaron sus animaciones de entrada
+     (el dominó cayó, los contadores llegaron a su número) y antes de que los textos
+     empiecen a irse. Así, avanzando con flechas, nada queda a medio camino. */
+  function computeStops() {
+    const tweens = VJ.tl.getChildren(true, true, false).map((tw) => [tw.startTime(), tw.endTime()]);
+    VJ.beats.forEach((b) => {
+      const late = b.t1 + b.hold * 0.75, cap = b.t2 - 0.22;
+      let end = b.t1 + b.hold * 0.42, limit = cap;
+      tweens.forEach(([s, e]) => {
+        if (s >= b.t0 && s < late) end = Math.max(end, e + 0.03);
+        else if (s >= late && s < b.t2 && e > s) limit = Math.min(limit, s - 0.02);
+      });
+      b.stop = b.i === 0 ? 0 : Math.max(b.t1 + 0.1, Math.min(end, limit));
+    });
+  }
   function go(i) {
     wheel.stop();
     const beats = VJ.beats;
     i = Math.max(0, Math.min(beats.length - 1, i));
-    const y = VJ.scrollFor(i === 0 ? 0 : targetT(beats[i]));
+    const y = VJ.scrollFor(beats[i].stop);
     const o = { y: scrollY };
     if (navT) navT.kill();
-    const dist = Math.abs(y - scrollY);
-    navT = gsap.to(o, { y, duration: VJ.RM ? 0.01 : Math.min(2.4, 0.9 + dist / 3800), ease: 'power1.inOut', onUpdate: () => scrollTo(0, o.y) });
+    // El viaje dura según cuánta historia hay que recorrer: los traslados largos se ven, no se saltean.
+    const dt = Math.abs(beats[i].stop - VJ.tl.time());
+    navT = gsap.to(o, { y, duration: VJ.RM ? 0.01 : Math.min(3.4, 0.7 + dt * 0.55), ease: 'power1.inOut', onUpdate: () => scrollTo(0, o.y) });
     current = i;
+    ui.paint && ui.paint(i);
   }
   ui.go = go;
 
@@ -206,6 +223,12 @@
   ];
 
   ui.init = function () {
+    computeStops();
+    const pager = $('#pager');
+    pager.addEventListener('click', (e) => { const s = e.target.closest('[data-step]'); if (s) go(nearestStop() + +s.dataset.step); });
+    const count = $('#pager-n');
+    ui.paint = (i) => { count.textContent = `${i + 1} / ${VJ.beats.length}`; $('#pager-prev').disabled = i === 0; $('#pager-next').disabled = i === VJ.beats.length - 1; };
+    ui.paint(0);
     const rail = $('#rail');
     rail.innerHTML = '<div id="rail-fill"></div>';
     PARTS.forEach((p) => {
@@ -242,7 +265,7 @@
   const narrator = $('#narrator');
   const moved = [];
   ui.onBeat = function (b) {
-    if (!(navT && navT.isActive())) current = b.i;
+    if (!(navT && navT.isActive())) { current = b.i; ui.paint && ui.paint(b.i); }
     const part = PARTS[b.part != null ? b.part : 0];
     const hp = $('#hud-part');
     if (part) { $('#hud-part-n').textContent = part.n; $('#hud-part-t').textContent = part.t; }

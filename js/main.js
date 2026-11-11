@@ -11,7 +11,7 @@
     const m = location.hash.match(/^#(.+)/);
     if (m) {
       const b = VJ.beats.find((x) => x.id === m[1]);
-      if (b) setTimeout(() => scrollTo(0, VJ.scrollFor(b.t1 + b.hold * 0.45)), 60);
+      if (b) setTimeout(() => scrollTo(0, VJ.scrollFor(b.stop)), 60);
     } else scrollTo(0, 0);
   }
   const ready = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]) : Promise.resolve();

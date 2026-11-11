@@ -97,7 +97,7 @@
       K.count(tl, '#n590', 0, 590, t + 0.05, 0.7);
       K.count(tl, '#n2000', 0, 2000, t + 0.2, 0.7, (v) => Math.round(v).toLocaleString('es-AR'));
     } });
-  VJ.beat({ id: 'u-conflicto', part: 3, r: 'ushuaia', cam: [2100, 1120, 2800], travel: 0.9, hold: 2.1, tint: 0.28, val: { x: 500, y: foot, ...V, pose: 'think', expr: 'worry', look: [0.9, -0.2] },
+  VJ.beat({ id: 'u-conflicto', part: 3, r: 'ushuaia', cam: [2100, 1120, 2800], travel: 0.9, hold: 2.3, tint: 0.28, val: { x: 500, y: foot, ...V, pose: 'think', expr: 'worry', look: [0.9, -0.2] },
     anim(tl, t, e, b) {
       tl.to('#cruise', { x: 1200, duration: 0.8, ease: 'sine.inOut' }, b.t0);
       tl.to('#rope,#tugL,#tugR', { autoAlpha: 1, duration: 0.2 }, t);
@@ -111,7 +111,7 @@
       tl.to('#cruise', { x: 4200, duration: 0.8, ease: 'sine.inOut' }, b.t0);
       [0, 1, 2, 3, 4].forEach((i) => { tl.to(`#lke${i}`, { scaleX: 0, duration: 0.14 }, t + 0.55 + i * 0.13); tl.to(`#lk${i + 1}`, { y: 60, rotation: i % 2 ? 7 : -8, opacity: 0.55, duration: 0.25, ease: 'power2.in' }, t + 0.6 + i * 0.13); });
     } });
-  VJ.beat({ id: 'u-gobernanza', part: 3, r: 'ushuaia', cam: [4950, 900, 2750], travel: 1.3, hold: 2, tint: 0.5, val: false,
+  VJ.beat({ id: 'u-gobernanza', part: 3, r: 'ushuaia', cam: [4950, 900, 2750], travel: 1.3, hold: 2.4, tint: 0.5, val: false,
     anim(tl, t) {
       gsap.set('#g1,#g2,#g3', { transformOrigin: '50% 50%' });
       tl.fromTo('#g2', { x: 210, y: -90 }, { x: 0, y: 0, duration: 0.5, ease: 'power2.inOut', immediateRender: false }, t + 0.1);
