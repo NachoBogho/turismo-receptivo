@@ -224,6 +224,13 @@
 
   ui.init = function () {
     computeStops();
+    // Si el sistema pidió menos movimiento, se avisa y se ofrece la versión animada.
+    const note = $('#motion-note');
+    if (VJ.RM && VJ.osReduce && !/[?&]calma/.test(location.search)) {
+      note.hidden = false;
+      $('#motion-on').addEventListener('click', () => { try { localStorage.setItem('vj-movimiento', 'completo'); } catch (e) {} location.replace(location.pathname + '?animar' + location.hash); });
+      $('#motion-x').addEventListener('click', () => { note.hidden = true; });
+    }
     const pager = $('#pager');
     pager.addEventListener('click', (e) => { const s = e.target.closest('[data-step]'); if (s) go(nearestStop() + +s.dataset.step); });
     const count = $('#pager-n');

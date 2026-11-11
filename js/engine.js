@@ -8,7 +8,15 @@
    ========================================================================== */
 window.VJ = window.VJ || {};
 (function () {
-  const RM = (VJ.RM = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]calma/.test(location.search));
+  /* Movimiento reducido: se respeta la preferencia del sistema (en Windows, "Efectos de
+     animación" apagado), pero quien presenta puede pedir las animaciones completas y la
+     elección queda guardada en ese navegador. ?calma la fuerza; ?animar la desactiva. */
+  const QP = new URLSearchParams(location.search);
+  let pick = null;
+  try { pick = localStorage.getItem('vj-movimiento'); } catch (e) {}
+  const osReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RM = (VJ.RM = QP.has('calma') || (osReduce && pick !== 'completo' && !QP.has('animar')));
+  VJ.osReduce = osReduce;
   document.documentElement.classList.toggle('rm', RM);
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const beats = (VJ.beats = []);
@@ -27,7 +35,8 @@ window.VJ = window.VJ || {};
   function setLive(R, on) {
     R.hits.forEach((n) => { n.style.pointerEvents = on ? '' : 'none'; });
     R.ambient.forEach((n) => { n.style.animationPlayState = on ? 'running' : 'paused'; });
-    [R.el, R.fgEl, R.textEl].forEach((n) => n && (n.style.visibility = on ? 'visible' : 'hidden'));
+    // El mapa base nunca se oculta: redibujarlo entero al volver dejaba huecos en blanco.
+    if (!R.base) [R.el, R.fgEl, R.textEl].forEach((n) => n && (n.style.visibility = on ? 'visible' : 'hidden'));
   }
 
   /* ---------- utilidades ---------- */
